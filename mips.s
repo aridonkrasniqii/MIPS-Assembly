@@ -1,55 +1,55 @@
 
-.text
-.globl main
+  .text
+  .globl main
 
-main:
+  main:
 
-la $a0 , array                           # first arr address
-la $a1 , 6                               # initialize n = 6
+  la $a0 , array                           # first array address
+  la $a1 , 6                               # initialize int n = 6
 
-jal largest                              # jump and load address to function
+  jal largest                              # jump and link  to function largest
 
-j finalexit                              # when function is returned jump to finalexit
+  j finalexit                              # when function is returned jump to finalexit
 
-largest:                                 # function largest
+  largest:                                 # function largest
 
-move $s0 , $a0                           # first arr address
-lw $t8 , 4($s0)                          #  max = array[0]
-move $t6 , $a1                           # int n
- 
-addi $t1, $t1, 0                         # int  i = 1
+  move $s0 , $a0                           # first address array
+  lw $t8 , 4($s0)                          # initialize int max = array[0]
+  move $t6 , $a1                           # int n
 
-        loop:
+  addi $t1, $t1, 0                         # initialize int  i = 1
 
-            slti $t2 , $t1 , 6           # if $t1 < 5 ? $t2 = 1 : $t2 = 0
-            beq $t2, $zero , exit        # if $t2 = 0 jump to exit
+          loop:                            # for loop
 
-            lw $t0 , 0($s0)              # loads member of array
+              slti $t2 , $t1 , 6           # if $t1 < 6 ? $t2 = 1 : $t2 = 0 | for (int i  = 1 ; i < n ; i++)
+              beq $t2, $zero , exit        # if $t2 = 0 jump to exit
 
-            addi $s0 , $s0 , 4           # increment $s0 to go to next member of array
-            addi $t1, $t1, 1             # i ++
+              lw $t0 , 0($s0)              # load member of array
 
-            slt $t9 , $t0 , $t8          # $ t0 < $t8 ? $t9 = 1 : $t9 = 0
-            bne $t9 , $zero ,loop        # if $t9 != 0 jump to loop
-            move $t8 , $t0               # max = arr[i]
+              addi $s0 , $s0 , 4           # increment $s0 to go to next member of array
+              addi $t1, $t1, 1             # increment i = i + 1
 
-        j loop
+              slt $t9 , $t0 , $t8          # $ t0 < $t8 ? $t9 = 1 : $t9 = 0 | if (array[i]  > max )
+              bne $t9 , $zero ,loop        # if $t9 != 0 jump to loop
+              move $t8 , $t0               # initialize max = arr[i]
 
-        exit:
+          j loop
 
-jr $ra
+          exit:
 
-finalexit:
+  jr $ra
 
-    li $v0 , 4
-    la $a0 , str
-    syscall
+  finalexit:
 
-    li $v0, 1
-    move $a0 , $t8
-    syscall
+      li $v0 , 4                          # print Largest in given array is:
+      la $a0 , str
+      syscall
 
-.data
+      li $v0, 1                           # print max value of array 
+      move $a0 , $t8
+      syscall
 
-array: .word 2222, 1, 53, 444, 5, 232
-str: .asciiz "Largest in given array is: "
+  .data
+
+  array: .word 2222, 1, 10000, 444, 5, 232311
+  str: .asciiz "Largest in given array is: "
